@@ -11,6 +11,7 @@
     <string name="permissions_error_notification_declined_permanently">به نظر می‌رسد مجوز اعلانات را برای همیشه رد کرده‌اید. می‌توانید برای اعطای آن به تنظیمات برنامه بروید.</string>
     <string name="permissions_error_btn_open_settings">تنظیمات برنامه</string>
     <string name="permissions_error_btn_confirm">تایید</string>
+    <string name="permissions_error_btn_dismiss">لغو</string>
 
 
     <string name="error_something_went_wrong">خطایی رخ داده. لطفا بعدا دوباره امتحان کنید.</string>

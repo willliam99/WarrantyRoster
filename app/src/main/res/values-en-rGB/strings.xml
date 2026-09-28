@@ -11,6 +11,7 @@
     <string name="permissions_error_notification_declined_permanently">It looks like you\'ve permanently denied notifications permission. You can go to the app settings to grant it.</string>
     <string name="permissions_error_btn_open_settings">App Settings</string>
     <string name="permissions_error_btn_confirm">Confirm</string>
+    <string name="permissions_error_btn_dismiss">Dismiss</string>
 
 
     <string name="error_something_went_wrong">Something went wrong. Please try again later.</string>

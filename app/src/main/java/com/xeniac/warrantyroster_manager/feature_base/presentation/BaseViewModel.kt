@@ -26,7 +26,6 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.WhileSubscribed
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -50,15 +49,17 @@ class BaseViewModel @Inject constructor(
     private val _state = MutableStateFlow(BaseState())
     val state = combine(
         flow = _state,
-        flow2 = baseUseCase.getNotificationPermissionCountUseCase.get()(),
-        flow3 = baseUseCase.getSelectedRateAppOptionUseCase.get()(),
-        flow4 = baseUseCase.getPreviousRateAppRequestDateTimeUseCase.get()()
-    ) { state, notificationPermissionCount, selectedRateAppOption, previousRateAppRequestDateTime ->
+        flow2 = baseUseCase.getSelectedRateAppOptionUseCase.get()(),
+        flow3 = baseUseCase.getPreviousRateAppRequestDateTimeUseCase.get()(),
+        flow4 = baseUseCase.getIsRequestNotificationPermissionShownTodayUseCase.get()()
+    ) { state, selectedRateAppOption, previousRateAppRequestDateTime, isRequestNotificationPermissionShownToday ->
         _state.update {
             state.copy(
-                notificationPermissionCount = notificationPermissionCount,
                 selectedRateAppOption = selectedRateAppOption,
-                previousRateAppRequestDateTime = previousRateAppRequestDateTime
+                previousRateAppRequestDateTime = previousRateAppRequestDateTime,
+                postNotificationPermissionState = state.postNotificationPermissionState.copy(
+                    isRequestNotificationPermissionShownToday = isRequestNotificationPermissionShownToday
+                )
             )
         }
         _state.value
@@ -99,11 +100,11 @@ class BaseViewModel @Inject constructor(
             BaseAction.SetSelectedRateAppOptionToNever -> setSelectedRateAppOptionToNever()
             BaseAction.SetSelectedRateAppOptionToRemindLater -> setSelectedRateAppOptionToRemindLater()
             BaseAction.DismissAppReviewDialog -> dismissAppReviewDialog()
-            is BaseAction.OnPermissionResult -> onPermissionResult(
-                permission = action.permission,
-                isGranted = action.isGranted
+            is BaseAction.OnNotificationPermissionResult -> onNotificationPermissionResult(
+                isGranted = action.isGranted,
+                isPermanentlyDeclined = action.isPermanentlyDeclined
             )
-            is BaseAction.DismissPermissionDialog -> dismissPermissionDialog(permission = action.permission)
+            BaseAction.DismissNotificationPermissionDialog -> dismissNotificationPermissionDialog()
         }
     }
 
@@ -242,37 +243,35 @@ class BaseViewModel @Inject constructor(
         }
     }
 
-    private fun onPermissionResult(
-        permission: String,
-        isGranted: Boolean
-    ) = viewModelScope.launch {
-        val shouldAskForPermission = _state.value.run {
-            notificationPermissionCount < 1 && !permissionDialogQueue.contains(permission) && !isGranted
-        }
-
-        if (shouldAskForPermission) {
-            _state.update {
-                it.copy(
-                    permissionDialogQueue = listOf(permission),
-                    isPermissionDialogVisible = true
-                )
-            }
-        }
-    }
-
-    private fun dismissPermissionDialog(
-        permission: String
+    private fun onNotificationPermissionResult(
+        isGranted: Boolean,
+        isPermanentlyDeclined: Boolean
     ) {
-        baseUseCase.storeNotificationPermissionCountUseCase.get()(
-            count = _state.value.notificationPermissionCount.plus(1)
-        ).onCompletion {
+        baseUseCase.storeRequestNotificationPermissionDateUseCase.get()().onStart {
             _state.update {
                 it.copy(
-                    permissionDialogQueue = _state.value.permissionDialogQueue
-                        .toMutableList().apply { remove(permission) }.toList(),
-                    isPermissionDialogVisible = false
+                    postNotificationPermissionState = it.postNotificationPermissionState.copy(
+                        isNotificationPermissionPermanentlyDeclined = when {
+                            !isGranted -> isPermanentlyDeclined
+                            else -> false
+                        },
+                        isNotificationPermissionDialogVisible = when {
+                            !isGranted -> isPermanentlyDeclined
+                            else -> false
+                        }
+                    )
                 )
             }
         }.launchIn(scope = viewModelScope)
+    }
+
+    private fun dismissNotificationPermissionDialog() = viewModelScope.launch {
+        _state.update {
+            it.copy(
+                postNotificationPermissionState = it.postNotificationPermissionState.copy(
+                    isNotificationPermissionDialogVisible = false
+                )
+            )
+        }
     }
 }

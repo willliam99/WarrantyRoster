@@ -13,10 +13,10 @@ sealed interface BaseAction {
     data object SetSelectedRateAppOptionToRemindLater : BaseAction
     data object DismissAppReviewDialog : BaseAction
 
-    data class OnPermissionResult(
-        val permission: String,
-        val isGranted: Boolean
+    data class OnNotificationPermissionResult(
+        val isGranted: Boolean,
+        val isPermanentlyDeclined: Boolean
     ) : BaseAction
 
-    data class DismissPermissionDialog(val permission: String) : BaseAction
+    data object DismissNotificationPermissionDialog : BaseAction
 }

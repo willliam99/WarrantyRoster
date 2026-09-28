@@ -12,9 +12,11 @@ import java.io.InputStream
 import java.io.OutputStream
 import java.util.Base64
 
+typealias RequestNotificationPermissionDate = String
+
 @Serializable
 data class PermissionsPreferences(
-    val notificationPermissionCount: Int = 0
+    val requestNotificationPermissionDate: RequestNotificationPermissionDate? = null
 )
 
 object PermissionsPreferencesSerializer : Serializer<PermissionsPreferences> {
