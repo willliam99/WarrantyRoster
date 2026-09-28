@@ -6,6 +6,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import kotlinx.parcelize.Parceler
 
 object TextFieldValueParceler : Parceler<TextFieldValue> {
+
     override fun TextFieldValue.write(
         parcel: Parcel,
         flags: Int
