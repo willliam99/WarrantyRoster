@@ -27,7 +27,7 @@ android {
 
     defaultConfig {
         applicationId = "com.xeniac.warrantyroster_manager"
-        minSdk = 23
+        minSdk = 24
         targetSdk = 37
         versionCode = 28
         versionName = "2.2.4"
