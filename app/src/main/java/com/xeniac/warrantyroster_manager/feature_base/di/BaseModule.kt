@@ -51,15 +51,18 @@ internal object HomeModule {
     @ViewModelScoped
     fun provideFirstInstallTimeInMs(
         @ApplicationContext context: Context
-    ): FirstInstallTimeInMs = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        context.packageManager.getPackageInfo(
-            /* packageName = */ context.packageName,
-            /* flags = */ PackageManager.PackageInfoFlags.of(0)
-        ).firstInstallTime
-    } else {
-        context.packageManager.getPackageInfo(
-            /* packageName = */ context.packageName,
-            /* flags = */ 0
-        ).firstInstallTime
+    ): FirstInstallTimeInMs = when {
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU -> {
+            context.packageManager.getPackageInfo(
+                /* packageName = */ context.packageName,
+                /* flags = */ PackageManager.PackageInfoFlags.of(0)
+            ).firstInstallTime
+        }
+        else -> {
+            context.packageManager.getPackageInfo(
+                /* packageName = */ context.packageName,
+                /* flags = */ 0
+            ).firstInstallTime
+        }
     }
 }
