@@ -7,12 +7,10 @@ import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 @ViewModelScoped
-class StoreNotificationPermissionCountUseCase @Inject constructor(
-    private val permissionsDataStoreRepository: PermissionsDataStoreRepository
+class GetIsRequestNotificationPermissionShownTodayUseCase @Inject constructor(
+    private val repository: PermissionsDataStoreRepository
 ) {
-    operator fun invoke(
-        count: Int
-    ): Flow<Unit> = flow {
-        return@flow emit(permissionsDataStoreRepository.storeNotificationPermissionCount(count))
+    operator fun invoke(): Flow<Boolean> = flow {
+        return@flow emit(repository.isRequestNotificationPermissionShownToday())
     }
 }

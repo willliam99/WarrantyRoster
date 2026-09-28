@@ -81,6 +81,8 @@ class WarrantiesViewModel @Inject constructor(
         _state.update {
             it.copy(isSearchBarVisible = false)
         }
+
+        searchQueryChanged(newValue = TextFieldValue())
     }
 
     private fun searchQueryChanged(

@@ -12,10 +12,10 @@ data class BaseUseCases @Inject constructor(
     val checkForAppUpdatesUseCase: Lazy<CheckForAppUpdatesUseCase>,
     val requestInAppReviewsUseCase: Lazy<RequestInAppReviewsUseCase>,
     val getLatestAppVersionUseCase: Lazy<GetLatestAppVersionUseCase>,
-    val getNotificationPermissionCountUseCase: Lazy<GetNotificationPermissionCountUseCase>,
-    val storeNotificationPermissionCountUseCase: Lazy<StoreNotificationPermissionCountUseCase>,
     val getSelectedRateAppOptionUseCase: Lazy<GetSelectedRateAppOptionUseCase>,
     val storeSelectedRateAppOptionUseCase: Lazy<StoreSelectedRateAppOptionUseCase>,
     val getPreviousRateAppRequestDateTimeUseCase: Lazy<GetPreviousRateAppRequestDateTimeUseCase>,
-    val storePreviousRateAppRequestDateTimeUseCase: Lazy<StorePreviousRateAppRequestDateTimeUseCase>
+    val storePreviousRateAppRequestDateTimeUseCase: Lazy<StorePreviousRateAppRequestDateTimeUseCase>,
+    val getIsRequestNotificationPermissionShownTodayUseCase: Lazy<GetIsRequestNotificationPermissionShownTodayUseCase>,
+    val storeRequestNotificationPermissionDateUseCase: Lazy<StoreRequestNotificationPermissionDateUseCase>
 )

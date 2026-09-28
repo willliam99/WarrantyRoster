@@ -42,7 +42,7 @@ import com.xeniac.warrantyroster_manager.feature_base.presentation.components.Ap
 import com.xeniac.warrantyroster_manager.feature_base.presentation.components.AppUpdateBottomSheet
 import com.xeniac.warrantyroster_manager.feature_base.presentation.components.CustomNavigationBar
 import com.xeniac.warrantyroster_manager.feature_base.presentation.components.NavigationBarItems
-import com.xeniac.warrantyroster_manager.feature_base.presentation.components.PostNotificationPermissionHandler
+import com.xeniac.warrantyroster_manager.feature_base.presentation.components.PostNotificationPermission
 import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -195,11 +195,11 @@ fun BaseScreen(
         )
     }
 
-    PostNotificationPermissionHandler(
-        isPermissionDialogVisible = state.isPermissionDialogVisible,
-        permissionDialogQueue = state.permissionDialogQueue,
+    PostNotificationPermission(
+        state = state.postNotificationPermissionState,
         onAction = viewModel::onAction
     )
+
 
     AppUpdateBottomSheet(
         isVisible = state.latestAppUpdateInfo != null,

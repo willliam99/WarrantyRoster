@@ -18,8 +18,9 @@ dependencyResolutionManagement {
 
 plugins {
     /*
-    Gradle settings plugin that automatically
-    detects, downloads, and configures the required JDKs for project
+     * Foojay Toolchains Resolver Convention plugin.
+     * Automatically detects, downloads, and configures the required JDKs for the project using the Foojay Disco API,
+     * enabling Gradle's Java toolchain management.
      */
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }
